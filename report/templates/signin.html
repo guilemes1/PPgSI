@@ -1,0 +1,32 @@
+{% extends "menu.html" %}
+
+{% block content %}
+
+<main class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="row w-100">
+        <div class="col-md-5 mx-auto">
+            <form action="/signin/" method="POST" class="card card-body">
+                
+                {% csrf_token %}
+                <h1 class="text-center">Login</h1>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">E-mail ou NUSP</label>
+                    <input type="text" class="form-control" name="username" id="username">
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Senha</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+
+                <label class="text-center pb-3 text-danger">{{ error }}</label>
+                <label class="text-center pb-3 text-success">{{ user_created }}</label>
+                
+                <button type="submit" class="btn btn-primary">Entrar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
