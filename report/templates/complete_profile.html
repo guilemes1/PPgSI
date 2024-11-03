@@ -1,0 +1,79 @@
+{% extends "menu.html" %}
+
+{% block content %}
+
+<main class="container d-flex justify-content-center align-items-center mt-5 py-3" style="min-height: 100vh;">
+    <div class="row w-100">
+        <div class="col-md-8 mx-auto">
+            <form method="POST" enctype="multipart/form-data" class="card card-body">
+                
+                {% csrf_token %}
+                <h2 class="text-center">Completar Perfil</h2>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Imagem de Perfil</label>
+                    {{ form.image }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="birth_date" class="form-label">Data de Nascimento</label>
+                    {{ form.birth_date }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="country" class="form-label">País</label>
+                    {{ form.country }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="state" class="form-label">Estado</label>
+                    {{ form.state }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="city" class="form-label">Cidade</label>
+                    {{ form.city }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="nationality" class="form-label">Nacionalidade</label>
+                    {{ form.nationality }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="course" class="form-label">Curso</label>
+                    {{ form.course }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="advisor" class="form-label">Orientador(a)</label>
+                    {{ form.advisor }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="lattes" class="form-label">Link para o Lattes</label>
+                    {{ form.lattes }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="enrollment_date" class="form-label">Data da matrícula</label>
+                    {{ form.enrollment_date }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="exam_date" class="form-label">Data de aprovação no exame de qualificação</label>
+                    {{ form.exam_date }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="language_exam_date" class="form-label">Data de aprovação no exame de proficiêcia em línguas</label>
+                    {{ form.language_exam_date }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

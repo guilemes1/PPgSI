@@ -1,0 +1,15 @@
+
+
+{% block content %}
+
+    {% if user.profile.tipo_usuario == 'aluno' %}
+        {% include 'aluno.html' %}
+    {% elif user.profile.tipo_usuario == 'orientador' %}
+        {% include 'orientador.html' %}
+    {% elif user.profile.tipo_usuario == 'coordenador' %}
+        {% include 'coordenador.html' %}
+    {% else %}
+        <p>Tipo de usuário inválido.</p>
+    {% endif %}
+
+{% endblock %}

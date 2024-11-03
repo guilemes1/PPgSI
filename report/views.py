@@ -1,5 +1,6 @@
 
 from .models import Profile
+from .forms import ProfileForm
 from django.db.models import Q 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 def home(request):
     return render(request, 'home.html')
 
@@ -47,7 +48,7 @@ def signup(request):
                             'error': 'RG e NUSP não podem ter mais de 11 dígitos!'
                         })
 
-                    #Se for aluno, is_active recebe True
+                    #is_active = True se o tipo de usuário for aluno
                     is_active = tipo_usuario == 'aluno'
 
                     user = User.objects.create_user(
@@ -60,7 +61,7 @@ def signup(request):
                     )
 
                     profile = Profile.objects.create(
-                        user=user,
+                        user=user,                      #Associando user e perfil
                         nusp=nusp,
                         rg=rg,
                         tipo_usuario=tipo_usuario
@@ -69,13 +70,16 @@ def signup(request):
                     user.save()
                     profile.save()
 
-                    message = 'Usuário criado com sucesso!'
-                    if not is_active:
-                        message += ' Orientadores e Coordenadores devem aguardar aprovação do administrador antes de efetuar login.'
-
-                    return render(request, 'signin.html', {
-                        'user_created': message
-                    })
+                    if is_active:
+                        user = authenticate(request, username=username, password=request.POST['password1'])
+                        if user is not None:
+                            login(request, user)
+                            return redirect('complete_profile')
+                    else:
+                        message = 'Usuário criado com sucesso! Orientadores e Coordenadores devem aguardar aprovação do administrador antes de efetuar login.'
+                        return render(request, 'signin.html', {
+                            'user_created': message
+                        })
 
                 except ValueError:
                     return render(request, 'signup.html', {
@@ -97,6 +101,24 @@ def signup(request):
             'form': UserCreationForm,
             'error': 'Senhas divergentes!'
         })
+    
+
+@login_required
+def complete_profile(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except Profile.DoesNotExist:
+        profile = Profile(user=request.user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_area')
+    else:
+        form = ProfileForm(instance=profile)
+
+    return render(request, 'complete_profile.html', {'form': form})
 
 
 ######################################################################### LOGIN
@@ -121,20 +143,25 @@ def signin(request):
                 })
 
             login(request, user)
+            return redirect('user_area')
 
-            profile = Profile.objects.get(user=user)
-            if profile.tipo_usuario == 'aluno':
-                return redirect('aluno')
-            elif profile.tipo_usuario == 'coordenador':
-                return redirect('coordenador')
-            elif profile.tipo_usuario == 'orientador':
-                return redirect('orientador')
+            #profile = Profile.objects.get(user=user)
+            #if profile.tipo_usuario == 'aluno':
+            #    return redirect('aluno')
+            #elif profile.tipo_usuario == 'coordenador':
+            #    return redirect('coordenador')
+            #elif profile.tipo_usuario == 'orientador':
+            #    return redirect('orientador')
 
         except Profile.DoesNotExist:
             return render(request, 'signin.html', {
                 'form': AuthenticationForm,
                 'error': 'Usuário não encontrado!'
             })
+
+@login_required
+def user_area(request):
+    return render(request, 'user_area.html')
         
 @login_required
 def aluno(request):

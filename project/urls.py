@@ -16,16 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from report.views import home, signin, signup, sair, aluno, orientador, coordenador
+from django.conf import settings
+from django.conf.urls.static import static
+from report.views import home, signin, signup, sair, user_area, aluno, orientador, coordenador, complete_profile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+
     path('signup/', signup, name='signup'),
+    path('complete_profile/', complete_profile, name='complete_profile'),
     path('signin/', signin, name='signin'),
     path('sair/', sair, name='sair'),
 
+    path('user_area/', user_area, name='user_area'),
     path('aluno/', aluno, name='aluno'),
     path('orientador/', orientador, name='orientador'),
     path('coordenador/', coordenador, name='coordenador'),
-]
+
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

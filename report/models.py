@@ -24,6 +24,18 @@ class Profile(models.Model):
     nusp = models.CharField(max_length=11, unique=True) 
     rg = models.CharField(max_length=11)
     tipo_usuario = models.CharField(max_length=12, choices=USER_TYPE_CHOICES)
+    image = models.ImageField(upload_to='images/users', default='images/users/default.png')
+    birth_date = models.DateField(blank=True, null=True)
+    country = models.CharField(max_length=32, blank=True)
+    state = models.CharField(max_length=32, blank=True)
+    city = models.CharField(max_length=32, blank=True)
+    nationality = models.CharField(max_length=32, blank=True)
+    course = models.CharField(max_length=250, blank=True)
+    advisor = models.CharField(max_length=50, blank=True)
+    lattes = models.URLField(blank=True)
+    enrollment_date = models.DateField(blank=True, null=True)
+    exam_date = models.DateField(blank=True, null=True)
+    language_exam_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.tipo_usuario} - NUSP: {self.nusp}"
