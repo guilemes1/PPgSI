@@ -115,6 +115,8 @@ def complete_profile(request):
         if form.is_valid():
             form.save()
             return redirect('user_area')
+        else:
+            print(form.errors)
     else:
         form = ProfileForm(instance=profile)
 
@@ -144,14 +146,6 @@ def signin(request):
 
             login(request, user)
             return redirect('user_area')
-
-            #profile = Profile.objects.get(user=user)
-            #if profile.tipo_usuario == 'aluno':
-            #    return redirect('aluno')
-            #elif profile.tipo_usuario == 'coordenador':
-            #    return redirect('coordenador')
-            #elif profile.tipo_usuario == 'orientador':
-            #    return redirect('orientador')
 
         except Profile.DoesNotExist:
             return render(request, 'signin.html', {

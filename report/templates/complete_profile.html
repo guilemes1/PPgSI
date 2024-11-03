@@ -10,6 +10,18 @@
                 {% csrf_token %}
                 <h2 class="text-center">Completar Perfil</h2>
 
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ field|capfirst }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
                 <div class="mb-3">
                     <label for="image" class="form-label">Imagem de Perfil</label>
                     {{ form.image }}
