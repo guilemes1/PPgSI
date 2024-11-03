@@ -14,8 +14,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
      - python3 manage.py createsuperuser
      - python3 manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
-- Execute deactivate no terminal quando terminar de utilizar.
-
+- Ao terminar de utilizar, aperte Ctrl + C no terminal e execute o comando deactivate
 
 ## Execução em Windows
 - Necessário ter o python instalado (https://www.python.org/downloads/windows/)
@@ -29,6 +28,6 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
      - python manage.py createsuperuser
 	- python manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
-- Execute deactivate no terminal quando terminar de utilizar.
+- Ao terminar de utilizar, aperte Ctrl + C no terminal e execute o comando deactivate
 
 
