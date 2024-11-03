@@ -2,6 +2,7 @@
 from .models import Profile
 from django.db.models import Q 
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -23,9 +24,10 @@ def signup(request):
             if request.POST['email'] == request.POST['email_confirmation']:
                 try:
                     email = request.POST['email']
-                    username = email.split('@')[0]  # username = parte anterior ao @
+                    username = email.split('@')[0]
                     nusp = request.POST['nusp']
                     rg = request.POST['rg']
+                    tipo_usuario = request.POST.get('tipo_usuario')
 
                     if not nusp.isdigit():
                         return render(request, 'signup.html', {
@@ -39,38 +41,40 @@ def signup(request):
                             'error': 'RG deve conter apenas dígitos!'
                         })
 
-                    if len(rg) > 11:
+                    if len(rg) > 11 or len(nusp) > 11:
                         return render(request, 'signup.html', {
                             'form': UserCreationForm,
-                            'error': 'O RG não pode ter mais de 11 dígitos!'
+                            'error': 'RG e NUSP não podem ter mais de 11 dígitos!'
                         })
 
-                    if len(nusp) > 11:
-                        return render(request, 'signup.html', {
-                            'form': UserCreationForm,
-                            'error': 'O NUSP não pode ter mais de 11 dígitos!'
-                        })
+                    #Se for aluno, is_active recebe True
+                    is_active = tipo_usuario == 'aluno'
 
                     user = User.objects.create_user(
                         username=username,
                         password=request.POST['password1'],
                         first_name=request.POST['first_name'],
                         last_name=request.POST['last_name'],
-                        email=email
+                        email=email,
+                        is_active=is_active
                     )
 
                     profile = Profile.objects.create(
-                        user=user,                  # Associando user e profile
+                        user=user,
                         nusp=nusp,
                         rg=rg,
-                        tipo_usuario='aluno'
+                        tipo_usuario=tipo_usuario
                     )
 
                     user.save()
                     profile.save()
 
+                    message = 'Usuário criado com sucesso!'
+                    if not is_active:
+                        message += ' Orientadores e Coordenadores devem aguardar aprovação do administrador antes de efetuar login.'
+
                     return render(request, 'signin.html', {
-                        'user_created': 'Usuário criado com sucesso! Faça o login.'
+                        'user_created': message
                     })
 
                 except ValueError:
@@ -93,7 +97,6 @@ def signup(request):
             'form': UserCreationForm,
             'error': 'Senhas divergentes!'
         })
-
 
 
 ######################################################################### LOGIN

@@ -11,6 +11,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
      - pip install -r requirements.txt
      - python3 manage.py makemigrations
      - python3 manage.py migrate
+     - python3 manage.py createsuperuser
      - python3 manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
 - Execute deactivate no terminal quando terminar de utilizar.
@@ -25,6 +26,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 	- pip install -r requeriments.txt
 	- python manage.py makemigrations
 	- python manage.py migrate
+     - python manage.py createsuperuser
 	- python manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
 - Execute deactivate no terminal quando terminar de utilizar.

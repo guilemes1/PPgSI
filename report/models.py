@@ -2,16 +2,16 @@ from django.db import models
 from django.contrib.auth.models import User
 
 #Atributos do User padrão
-##username: Um campo obrigatório que identifica o usuário de forma única. É utilizado para login.
-##first_name: O primeiro nome do usuário, opcional.
-##last_name: O sobrenome do usuário, opcional.
-##email: O email do usuário, opcional, mas pode ser configurado como obrigatório para cadastro.
-##password: A senha do usuário, armazenada de forma criptografada.
-##is_staff: Um campo booleano que indica se o usuário pode acessar o painel de administração (True) ou não (False).
-##is_active: Um campo booleano que indica se o usuário está ativo. Usuários inativos não podem fazer login.
-##is_superuser: Um campo booleano que indica se o usuário tem todas as permissões (True) ou não (False).
-##last_login: A data e hora do último login.
-##date_joined: A data e hora em que o usuário foi criado/cadastrado
+##username: Único. Pode ser utilizado para login.
+##first_name: Opcional.
+##last_name: Opcional.
+##email: Opcional, mas pode ser configurado como obrigatório e usado para login.
+##password: Armazenada com criptografia.
+##is_staff: Boolean para indicar se o usuário pode acessar o painel de administrador.
+##is_active: Boolean. Usuários inativos não podem fazer login.
+##is_superuser: Boolean para indicar usuários que possuem todas as permissões.
+##last_login: A data e hora.
+##date_joined: A data e hora.
 
 class Profile(models.Model):
     USER_TYPE_CHOICES = [
