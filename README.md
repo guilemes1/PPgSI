@@ -11,7 +11,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
      - pip install -r requirements.txt
      - python3 manage.py makemigrations
      - python3 manage.py migrate
-     - python3 manage.py createsuperuser
+- python3 manage.py createsuperuser
      - python3 manage.py shell
      - from report.scripts.popular_models import criar_orientadores, criar_coordenadores, popular_disciplinas
      - quit()
