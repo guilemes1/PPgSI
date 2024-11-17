@@ -31,7 +31,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 python manage.py createsuperuser
 python manage.py shell
 from report.scripts.popular_models import criar_orientadores, criar_coordenadores, popular_disciplinas
-        - quit()
+	- quit()
 	- python manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
 - Ao terminar de utilizar, aperte Ctrl + C no terminal e execute o comando deactivate
