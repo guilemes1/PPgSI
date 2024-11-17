@@ -22,7 +22,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 - Acesse a pasta pelo terminal e execute os seguintes comandos:
 	- python -m venv venv
 	- .\venv\scripts\activate
-	- pip install -r requeriments.txt
+	- pip install -r requirements.txt
 	- python manage.py makemigrations
 	- python manage.py migrate
      - python manage.py createsuperuser
@@ -31,3 +31,6 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 - Ao terminar de utilizar, aperte Ctrl + C no terminal e execute o comando deactivate
 
 
+
+
+*Note que, ao extrair, pode ser que duas pastas com o mesmo nome sejam criadas. O caminho correto onde os comandos devem ser executados seria algo como C:\Users\nome\Downloads\GCM-main\GCM-main
