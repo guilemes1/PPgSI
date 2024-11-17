@@ -159,14 +159,20 @@ def user_area(request):
         
 @login_required
 def aluno(request):
+    if request.user.profile.tipo_usuario == 'orientador' or request.user.profile.tipo_usuario == 'coordenador':
+        return redirect('user_area')
     return render(request, 'aluno.html')
 
 @login_required
 def orientador(request):
+    if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'coordenador':
+        return redirect('user_area')
     return render(request, 'orientador.html')
 
 @login_required
 def coordenador(request):
+    if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'orientador':
+        return redirect('user_area')
     return render(request, 'coordenador.html')
 
 
