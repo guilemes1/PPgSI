@@ -28,9 +28,9 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 	- pip install -r requirements.txt
 	- python manage.py makemigrations
 	- python manage.py migrate
-     	- python manage.py createsuperuser
-        - python manage.py shell
-        - from report.scripts.popular_models import criar_orientadores, criar_coordenadores, popular_disciplinas
+python manage.py createsuperuser
+python manage.py shell
+from report.scripts.popular_models import criar_orientadores, criar_coordenadores, popular_disciplinas
         - quit()
 	- python manage.py runserver
 - No navegador, acesse o endereço http://127.0.0.1:8000/
