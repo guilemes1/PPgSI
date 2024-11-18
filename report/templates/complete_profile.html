@@ -22,64 +22,135 @@
                     </div>
                 {% endif %}
 
-                <div class="mb-3">
-                    <label for="image" class="form-label">Imagem de Perfil</label>
-                    {{ form.image }}
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="image" class="form-label">Imagem de Perfil</label>
+                        <input type="file" class="form-control {% if form.image.errors %}is-invalid{% endif %}" id="image" name="image" value="{{ form.image.value }}">
+                        {% for error in form.image.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="birth_date" class="form-label">Data de Nascimento</label>
+                        <input type="date" class="form-control {% if form.birth_date.errors %}is-invalid{% endif %}" id="birth_date" name="birth_date" value="{{ form.birth_date.value }}">
+                        {% for error in form.birth_date.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="birth_date" class="form-label">Data de Nascimento</label>
-                    {{ form.birth_date }}
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="country" class="form-label">País</label>
+                        <input type="text" class="form-control {% if form.country.errors %}is-invalid{% endif %}" id="country" name="country" value="{{ form.country.value }}">
+                        {% for error in form.country.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="nationality" class="form-label">Nacionalidade</label>
+                        <input type="text" class="form-control {% if form.nationality.errors %}is-invalid{% endif %}" id="nationality" name="nationality" value="{{ form.nationality.value }}">
+                        {% for error in form.nationality.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="country" class="form-label">País</label>
-                    {{ form.country }}
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="state" class="form-label">Estado</label>
+                        <input type="text" class="form-control {% if form.state.errors %}is-invalid{% endif %}" id="state" name="state" value="{{ form.state.value }}">
+                        {% for error in form.state.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">Cidade</label>
+                        <input type="text" class="form-control {% if form.city.errors %}is-invalid{% endif %}" id="city" name="city" value="{{ form.city.value }}">
+                        {% for error in form.city.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="state" class="form-label">Estado</label>
-                    {{ form.state }}
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="course" class="form-label">Curso</label>
+                        <select class="form-control {% if form.course.errors %}is-invalid{% endif %}" id="course" name="course">
+                            <option value="" disabled {% if not form.course.value %}selected{% endif %}>Selecione um tipo</option>
+                            <option value="Mestrado" {% if form.course.value == 'Mestrado' %}selected{% endif %}>Mestrado</option>
+                            <option value="Doutorado" {% if form.course.value == 'Doutorado' %}selected{% endif %}>Doutorado</option>
+                        </select>
+                        {% for error in form.course.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="advisor" class="form-label">Orientador(a)</label>
+                        <select class="form-control {% if form.advisor.errors %}is-invalid{% endif %}" id="advisor" name="advisor">
+                            <option value="" {% if not form.advisor.value %}selected{% endif %} disabled>Selecione um orientador</option>
+                            {% for orientador in orientadores %}
+                                <option value="{{ orientador.profile.nusp }}" {% if form.advisor.value == orientador.profile.nusp %}selected{% endif %}>
+                                    {{ orientador.first_name }} {{ orientador.last_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% for error in form.advisor.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="city" class="form-label">Cidade</label>
-                    {{ form.city }}
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label for="lattes" class="form-label">Link para o Lattes</label>
+                        <input type="url" class="form-control {% if form.lattes.errors %}is-invalid{% endif %}" id="lattes" name="lattes" value="{{ form.lattes.value }}">
+                        {% for error in form.lattes.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="enrollment_date" class="form-label">Data da Matrícula</label>
+                        <input type="date" class="form-control {% if form.enrollment_date.errors %}is-invalid{% endif %}" id="enrollment_date" name="enrollment_date" value="{{ form.enrollment_date.value }}">
+                        {% for error in form.enrollment_date.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    <label for="nationality" class="form-label">Nacionalidade</label>
-                    {{ form.nationality }}
-                </div>
+                <div class="row mb-3">
 
-                <div class="mb-3">
-                    <label for="course" class="form-label">Curso</label>
-                    {{ form.course }}
-                </div>
+                    <div class="col-md-6">
+                        <label for="exam_date" class="form-label">Data de Aprovação no Exame de Qualificação</label>
+                        <input type="date" class="form-control {% if form.exam_date.errors %}is-invalid{% endif %}" id="exam_date" name="exam_date" value="{{ form.exam_date.value }}">
+                        {% for error in form.exam_date.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
 
-                <div class="mb-3">
-                    <label for="advisor" class="form-label">Orientador(a)</label>
-                    {{ form.advisor }}
-                </div>
-
-                <div class="mb-3">
-                    <label for="lattes" class="form-label">Link para o Lattes</label>
-                    {{ form.lattes }}
-                </div>
-
-                <div class="mb-3">
-                    <label for="enrollment_date" class="form-label">Data da matrícula</label>
-                    {{ form.enrollment_date }}
-                </div>
-
-                <div class="mb-3">
-                    <label for="exam_date" class="form-label">Data de aprovação no exame de qualificação</label>
-                    {{ form.exam_date }}
-                </div>
-
-                <div class="mb-3">
-                    <label for="language_exam_date" class="form-label">Data de aprovação no exame de proficiêcia em línguas</label>
-                    {{ form.language_exam_date }}
+                    <div class="col-md-6">
+                        <label for="language_exam_date" class="form-label">Data de Aprovação no Exame de Línguas</label>
+                        <input type="date" class="form-control {% if form.language_exam_date.errors %}is-invalid{% endif %}" id="language_exam_date" name="language_exam_date" value="{{ form.language_exam_date.value }}">
+                        {% for error in form.language_exam_date.errors %}
+                            <div class="invalid-feedback">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
                 </div>
 
                 <button type="submit" class="btn btn-primary">Salvar</button>

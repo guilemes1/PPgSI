@@ -36,6 +36,32 @@ class Profile(models.Model):
     enrollment_date = models.DateField(blank=True, null=True)
     exam_date = models.DateField(blank=True, null=True)
     language_exam_date = models.DateField(blank=True, null=True)
+    passed_courses = models.TextField(blank=True, default='')
+    failed_courses = models.TextField(blank=True, default='')
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.tipo_usuario} - NUSP: {self.nusp}"
+    
+    def get_passed_courses(self):
+        return self.passed_courses.split(',') if self.passed_courses else []
+    
+    def set_passed_courses(self, passed_courses_list):
+        self.passed_courses = ','.join(passed_courses_list)
+
+    def get_failed_courses(self):
+        return self.failed_courses.split(',') if self.failed_courses else []
+
+    def set_failed_courses(self, failed_courses_list):
+        self.failed_courses = ','.join(failed_courses_list)
+
+
+class Disciplina(models.Model):
+    responsavel = models.ForeignKey(Profile, on_delete=models.PROTECT)
+    codigo = models.CharField(max_length=7, unique=True)
+    nome = models.CharField(max_length=255)
+    creditos = models.CharField(max_length=10)
+    carga_horaria_semanal = models.CharField(max_length=50)
+    
+
+    def __str__(self):
+        return self.nome

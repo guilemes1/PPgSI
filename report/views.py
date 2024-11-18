@@ -120,7 +120,12 @@ def complete_profile(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, 'complete_profile.html', {'form': form})
+    orientadores = User.objects.filter(profile__tipo_usuario='orientador')
+
+    return render(request, 'complete_profile.html', {
+        'form': form,
+        'orientadores': orientadores
+        })
 
 
 ######################################################################### LOGIN
