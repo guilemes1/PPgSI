@@ -1,14 +1,98 @@
 {% extends "menu.html" %}
 
 {% block content %}
+<div class="container mt-5">
+    <div class="container py-3">
+        <h2>Meus Relatórios</h2>
+    </div>
 
+    {% if relatorios %}
+        <div class="row">
+            {% for relatorio in relatorios %}
+                <div class="col-md-12 mb-4">
+                    <div class="card shadow-sm">
+  
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Relatório de {{ relatorio.nome_aluno }}</h5>
+                            <button class="btn btn-info" onclick="toggleDetails('detalhes-{{ relatorio.id }}')">Detalhes</button>
+                        </div>
 
-<div class='container'>
-    <br>
-    <br>
-    <br>
-    <h2> Aluno Logado </h2>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <p><strong>Semestre:</strong> 
+                                        {% if relatorio.data_criacao.month <= 6 %}
+                                            1º de {{ relatorio.data_criacao.year }}
+                                        {% else %}
+                                            2º de {{ relatorio.data_criacao.year }}
+                                        {% endif %}
+                                    </p>
+                                    <p><strong>Curso:</strong> {{ relatorio.curso }}</p>
+                                    <p><strong>Data da Matrícula:</strong> {{ relatorio.data_matricula }}</p>
+                                    <p><strong>Orientador:</strong> {{ relatorio.nome_orientador }}</p>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <p><strong>Email:</strong> {{ relatorio.email }}</p>
+                                    <p><strong>Número USP:</strong> {{ relatorio.nusp }}</p>
+                                    <p><strong>Link do Lattes:</strong> <a href="{{ relatorio.lattes }}" target="_blank">{{ relatorio.lattes }}</a></p>
+                                    <p><strong>Data da última atualização do Lattes:</strong> {{ relatorio.data_atualizacao_lattes }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="detalhes-{{ relatorio.id }}" class="card-body detalhes">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Avaliação do último relatório:</strong> {{ relatorio.avaliacao_ultimo_relatorio }}</p>
+                                    <p><strong>Aprovações desde o início do curso:</strong> {{ relatorio.aporvacoes_inicio_curso }}</p>
+                                    <p><strong>Reprovações no Semestre Anterior:</strong> {{ relatorio.reprovacoes_semestre_anterior }}</p>
+                                    <p><strong>Reprovações desde o início do curso:</strong> {{ relatorio.reprovacoes_inicio_curso }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Realizou o exame de proficiência em idiomas?</strong> {{ relatorio.realizacao_exame_idiomas }}</p>
+                                    <p><strong>Realizou o exame de qualificação?</strong> {{ relatorio.realizacao_exame_qualificacao }}</p>
+                                    <p><strong>Prazo máximo para inscrição no exame de qualificação:</strong> {{ relatorio.prazo_qualificacao }}</p>
+                                    <p><strong>Prazo máximo para depósito da dissertação:</strong> {{ relatorio.prazo_dissertacao }}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Artigos em fase de escrita:</strong> {{ relatorio.artigos_em_escrita }}</p>
+                                    <p><strong>Artigos submetidos e em avaliação:</strong> {{ relatorio.artigos_em_avaliacao }}</p>
+                                    <p><strong>Artigos aceitos ou publicados:</strong> {{ relatorio.artigos_publicados }}</p>
+                                    <p><strong>Data de Criação deste Relatório:</strong> {{ relatorio.data_criacao }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Relato das atividades acadêmicas no semestre:</strong> {{ relatorio.atividades_academicas_semestre_atual }}</p>
+                                    <p><strong>Resumo das atividades de pesquisa:</strong> {{ relatorio.atividades_pesquisa }}</p>
+                                    <p><strong>Declarações adicionais para a CPP:</strong> {{ relatorio.declaracao_adicional }}</p>
+                                    <p><strong>Precisa de apoio da coordenação?</strong> {{ relatorio.precisa_apoio }}</p>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info mt-3">
+                                {% if not relatorio.parecer_orientador %}
+                                    <p><strong>Aguardando parecer do(a) orientador(a)</strong></p>
+                                {% else %}
+                                    <p><strong>Parecer do Orientador:</strong> {{ relatorio.parecer_orientador }}</p>
+                                {% endif %}
+                                {% if not relatorio.parecer_coordenador %}
+                                    <p><strong>Aguardando parecer do(a) coordenador(a)</strong></p>
+                                {% else %}
+                                    <p><strong>Parecer do Coordenador:</strong> {{ relatorio.parecer_coordenador }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Você ainda não tem relatórios registrados.</p>
+    {% endif %}
 </div>
-
-
 {% endblock %}
+

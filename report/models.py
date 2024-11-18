@@ -65,3 +65,62 @@ class Disciplina(models.Model):
 
     def __str__(self):
         return self.nome
+    
+class Relatorio(models.Model):
+    AVALIACAO_ULTIMO_RELATORIO = [
+        ('Aprovado', 'Aprovado'),
+        ('Aprovado com ressalvas', 'Aprovado com ressalvas'),
+        ('Insatisfatório', 'Insatisfatório'),
+        ('Não se aplica (é o primeiro relatório)', 'Não se aplica (é o primeiro relatório)'),
+    ]
+
+    OPCOES_APROVACOES_REPROVACOES_ARTIGOS = [
+        ('0', '0'),
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+        ('4 ou mais', '4 ou mais'),
+    ]
+
+    OPCOES_EXAMES = [
+        ('Sim. Fui aprovado', 'Sim. Fui aprovado'),
+        ('Sim. Fui reprovado', 'Sim. Fui reprovado'),
+        ('Não', 'Não'),
+    ]
+
+    OPCOES_APOIO = [
+        ('Sim', 'Sim'),
+        ('Não', 'Não'),
+    ]
+
+    email = models.CharField(max_length=50)
+    nome_aluno = models.CharField(max_length=250)
+    nome_orientador = models.CharField(max_length=250)
+    nusp = models.CharField(max_length=11)
+    lattes = models.URLField()
+    data_atualizacao_lattes = models.DateField()
+    curso = models.CharField(max_length=9)
+    data_matricula = models.DateField()
+    avaliacao_ultimo_relatorio = models.CharField(max_length=38, choices=AVALIACAO_ULTIMO_RELATORIO)
+    aporvacoes_inicio_curso = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    reprovacoes_semestre_anterior = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    reprovacoes_inicio_curso = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    realizacao_exame_idiomas = models.CharField(max_length=18, choices=OPCOES_EXAMES)
+    realizacao_exame_qualificacao = models.CharField(max_length=18, choices=OPCOES_EXAMES)
+    prazo_qualificacao = models.DateField(blank=True, null=True)
+    prazo_dissertacao = models.DateField()
+    artigos_em_escrita = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    artigos_em_avaliacao = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    artigos_publicados = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+    atividades_academicas_semestre_atual = models.TextField()
+    atividades_pesquisa = models.TextField()
+    declaracao_adicional = models.TextField(blank=True, null=True)
+    precisa_apoio = models.CharField(max_length=3, choices=OPCOES_APOIO)
+    data_criacao = models.DateField()
+    parecer_orientador = models.CharField(max_length=22, blank=True, null=True)
+    parecer_coordenador = models.CharField(max_length=22, blank=True, null=True)
+    primeira_avaliacao = models.BooleanField(default=True)                          #mudar apos parecer do coordenador
+    segunda_avaliacao = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.nusp}; Orientador: {self.nome_orientador}; Data de criação: {self.data_criacao}"

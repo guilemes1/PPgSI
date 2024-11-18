@@ -1,0 +1,252 @@
+{% extends "menu.html" %}
+
+{% block content %}
+<main class="container d-flex justify-content-center align-items-center mt-5 py-3" style="min-height: 100vh;">
+    <div class="row w-100">
+        <div class="col-md-10 mx-auto">
+            <form method="POST" enctype="multipart/form-data" class="card card-body">
+                {% csrf_token %}
+                <h2 class="text-center mb-5">Criar Relatório</h2>
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ field|capfirst }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="row mb-5" hidden>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" 
+                               class="form-control {% if form.email.errors %}is-invalid{% endif %}" 
+                               id="email" name="email" 
+                               value="{{ email }}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nome_aluno" class="form-label">Nome do(a) aluno(a)</label>
+                        <input type="text" 
+                               class="form-control {% if form.nome_aluno.errors %}is-invalid{% endif %}" 
+                               id="nome_aluno" name="nome_aluno" 
+                               value="{{ nome_aluno }}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-5" hidden>
+                    <div class="col-md-6">
+                        <label for="nome_orientador" class="form-label">Nome do(a) orientador(a)</label>
+                        <input type="text" 
+                               class="form-control {% if form.nome_orientador.errors %}is-invalid{% endif %}" 
+                               id="nome_orientador" name="nome_orientador" 
+                               value="{{ nome_orientador }}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nusp" class="form-label">Número USP</label>
+                        <input type="text" 
+                               class="form-control {% if form.nusp.errors %}is-invalid{% endif %}" 
+                               id="nusp" name="nusp" 
+                               value="{{ nusp }}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-5" hidden>
+                    <div class="col-md-6">
+                        <label for="lattes" class="form-label">Link para o Lattes</label>
+                        <input type="url" 
+                               class="form-control {% if form.lattes.errors %}is-invalid{% endif %}" 
+                               id="lattes" name="lattes" 
+                               value="{{ lattes }}" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="curso" class="form-label">Curso</label>
+                        <input type="text" 
+                               class="form-control {% if form.curso.errors %}is-invalid{% endif %}" 
+                               id="curso" name="curso" 
+                               value="{{ curso }}" readonly>
+                    </div>
+                </div>
+
+                <div class="row mb-5" hidden>
+                    <div class="col-md-6">
+                        <label for="data_matricula" class="form-label">Data da matrícula</label>
+                        <input type="date" 
+                               class="form-control {% if form.data_matricula.errors %}is-invalid{% endif %}" 
+                               id="data_matricula" name="data_matricula" 
+                               value="{{ data_matricula|date:'Y-m-d' }}" readonly>
+                    </div>      
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label for="data_atualizacao_lattes" class="form-label">Data da última atualização do Lattes</label>
+                        <input type="date" 
+                            class="form-control {% if form.data_atualizacao_lattes.errors %}is-invalid{% endif %}" 
+                            id="data_atualizacao_lattes" name="data_atualizacao_lattes" 
+                            value="{{ data_atualizacao_lattes|date:'Y-m-d' }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="avaliacao_ultimo_relatorio" class="form-label">Qual foi o resultado da avaliação do seu último relatório?</label>
+                        <select class="form-select" id="avaliacao_ultimo_relatorio" name="avaliacao_ultimo_relatorio" required>
+                            {% for value, label in form.avaliacao_ultimo_relatorio.field.choices %}
+                                <option value="{{ value }}" {% if form.avaliacao_ultimo_relatorio.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>          
+                
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <label for="aporvacoes_inicio_curso" class="form-label">Aprovações desde o início do curso</label>
+                        <select class="form-select" id="aporvacoes_inicio_curso" name="aporvacoes_inicio_curso" required>
+                            {% for value, label in form.aporvacoes_inicio_curso.field.choices %}
+                                <option value="{{ value }}" {% if form.aporvacoes_inicio_curso.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                
+                    <div class="col-md-4">
+                        <label for="reprovacoes_semestre_anterior" class="form-label">Reprovações no semestre anterior</label>
+                        <select class="form-select" id="reprovacoes_semestre_anterior" name="reprovacoes_semestre_anterior" required>
+                            {% for value, label in form.reprovacoes_semestre_anterior.field.choices %}
+                                <option value="{{ value }}" {% if form.reprovacoes_semestre_anterior.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                
+                    <div class="col-md-4">
+                        <label for="reprovacoes_inicio_curso" class="form-label">Reprovações desde o início do curso</label>
+                        <select class="form-select" id="reprovacoes_inicio_curso" name="reprovacoes_inicio_curso" required>
+                            {% for value, label in form.reprovacoes_inicio_curso.field.choices %}
+                                <option value="{{ value }}" {% if form.reprovacoes_inicio_curso.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            
+                
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label for="realizacao_exame_idiomas" class="form-label">Já realizou o exame de proficiência em idiomas?</label>
+                        <select class="form-select" id="realizacao_exame_idiomas" name="realizacao_exame_idiomas" required>
+                            {% for value, label in form.realizacao_exame_idiomas.field.choices %}
+                                <option value="{{ value }}" {% if form.realizacao_exame_idiomas.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="realizacao_exame_qualificacao" class="form-label">Já realizou o exame de qualificação?</label>
+                        <select class="form-select" id="realizacao_exame_qualificacao" name="realizacao_exame_qualificacao" required>
+                            {% for value, label in form.realizacao_exame_qualificacao.field.choices %}
+                                <option value="{{ value }}" {% if form.realizacao_exame_qualificacao.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            
+                
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <label for="prazo_qualificacao" class="form-label">Qual é o seu prazo máximo para inscrição no exame de qualificação?</label>
+                        <input type="date" class="form-control" id="prazo_qualificacao" name="prazo_qualificacao"
+                            value="{{ form.prazo_qualificacao.value|default:'' }}">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="prazo_dissertacao" class="form-label">Qual é o seu prazo máximo para depósito da dissertação?</label>
+                        <input type="date" class="form-control" id="prazo_dissertacao" name="prazo_dissertacao"
+                               value="{{ form.prazo_dissertacao.value|default:'' }}" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-5">
+                    <div class="col-md-4">
+
+                        <label for="artigos_em_escrita" class="form-label">Artigos em fase de escrita</label>
+                        <select class="form-select" id="artigos_em_escrita" name="artigos_em_escrita" required>
+                            {% for value, label in form.artigos_em_escrita.field.choices %}
+                                <option value="{{ value }}" {% if form.artigos_em_escrita.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="artigos_em_avaliacao" class="form-label">Artigos submetidos e em avaliação</label>
+                        <select class="form-select" id="artigos_em_avaliacao" name="artigos_em_avaliacao" required>
+                            {% for value, label in form.artigos_em_avaliacao.field.choices %}
+                                <option value="{{ value }}" {% if form.artigos_em_avaliacao.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="artigos_publicados" class="form-label">Artigos aceitos ou publicados</label>
+                        <select class="form-select" id="artigos_publicados" name="artigos_publicados" required>
+                            {% for value, label in form.artigos_publicados.field.choices %}
+                                <option value="{{ value }}" {% if form.artigos_publicados.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label for="atividades_academicas_semestre_atual" class="form-label">Relate aqui as atividades ou eventos acadêmicos que você participou no semestre (congresso, visita técnica, intercâmbio, estágio PAE, etc)</label>
+                    <textarea class="form-control {% if form.atividades_academicas_semestre_atual.errors %}is-invalid{% endif %}" 
+                              id="atividades_academicas_semestre_atual" 
+                              name="atividades_academicas_semestre_atual" rows="4"></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="atividades_pesquisa" class="form-label">Apresente um <strong>resumo</strong> das suas atividades de pesquisa até o momento e das atividades que ainda precisam ser desenvolvidas até a conclusão do seu curso</label>
+                    <textarea class="form-control {% if form.atividades_pesquisa.errors %}is-invalid{% endif %}" 
+                              id="atividades_pesquisa" 
+                              name="atividades_pesquisa" rows="4"></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="declaracao_adicional" class="form-label">Você tem algo adicional para declarar a CPP - PPgSI que considera importante para sua avaliação?</label>
+                    <textarea class="form-control {% if form.declaracao_adicional.errors %}is-invalid{% endif %}" 
+                              id="declaracao_adicional" 
+                              name="declaracao_adicional" rows="4"></textarea>
+                </div>
+
+                <div class="mb-5">
+                    <label for="precisa_apoio" class="form-label">Está enfrentando alguma dificuldade que precisa de apoio da coordenação do curso?</label>
+                    <select class="form-control {% if form.precisa_apoio.errors %}is-invalid{% endif %}" 
+                            id="precisa_apoio" name="precisa_apoio">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Salvar Relatório</button>
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

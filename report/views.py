@@ -1,6 +1,7 @@
 
+from .forms import *
 from .models import Profile
-from .forms import ProfileForm
+from django.utils import timezone
 from django.db.models import Q 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
@@ -160,14 +161,25 @@ def signin(request):
 
 @login_required
 def user_area(request):
-    return render(request, 'user_area.html')
-        
+
+    if request.user.profile.tipo_usuario == 'aluno':
+        nusp_aluno_logado = request.user.profile.nusp
+    
+    relatorios_aluno = Relatorio.objects.filter(nusp=nusp_aluno_logado)
+
+    return render(request, 'user_area.html', {'relatorios': relatorios_aluno})
+
+############################################################################################################## PAG PRINCIPAL ALUNO        
 @login_required
 def aluno(request):
     if request.user.profile.tipo_usuario == 'orientador' or request.user.profile.tipo_usuario == 'coordenador':
         return redirect('user_area')
+
     return render(request, 'aluno.html')
 
+
+
+################################################################################################################
 @login_required
 def orientador(request):
     if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'coordenador':
@@ -180,7 +192,54 @@ def coordenador(request):
         return redirect('user_area')
     return render(request, 'coordenador.html')
 
+############################################################################### CRIAR RELATORIO
+@login_required
+def create_report(request):
+    user = request.user
+    profile = Profile.objects.get(user=user)
 
+    orientador = None
+    if profile.advisor:  
+        try:
+            orientador_profile = Profile.objects.get(nusp=profile.advisor)
+            orientador = f"{orientador_profile.user.first_name} {orientador_profile.user.last_name}"
+        except Profile.DoesNotExist:
+            orientador = "Orientador não encontrado"
+
+    initial_data = {
+        'email': user.email,
+        'nome_aluno': f"{user.first_name} {user.last_name}",
+        'nome_orientador': orientador or '',
+        'nusp': profile.nusp,
+        'lattes': profile.lattes,
+        'curso': profile.course,
+        'data_matricula': profile.enrollment_date,
+    }
+
+    if request.method == 'POST':
+        form = RelatorioForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.email = initial_data['email']
+            report.nome_aluno = initial_data['nome_aluno']
+            report.nome_orientador = initial_data['nome_orientador']
+            report.nusp = initial_data['nusp']
+            report.lattes = initial_data['lattes']
+            report.curso = initial_data['curso']
+            report.data_matricula = initial_data['data_matricula']
+            report.data_criacao = timezone.localtime(timezone.now()).date()
+            report.save()
+            return redirect('user_area') 
+    else:
+
+        form = RelatorioForm(initial=initial_data)
+
+    context = {
+        'form': form,  
+    }
+    return render(request, 'create_report.html', context)
+
+############################################################################################################ LOGOUT
 @login_required
 def sair(request):
     logout(request)

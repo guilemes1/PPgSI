@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from report.views import home, signin, signup, sair, user_area, aluno, orientador, coordenador, complete_profile
+from report.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +33,9 @@ urlpatterns = [
     path('aluno/', aluno, name='aluno'),
     path('orientador/', orientador, name='orientador'),
     path('coordenador/', coordenador, name='coordenador'),
+
+    path('create_report/', create_report, name='create_report'),
+
 
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
