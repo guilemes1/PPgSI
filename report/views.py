@@ -11,8 +11,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 
-def home(request):
-    return render(request, 'home.html')
+def homepage(request):
+    return render(request, 'homepage.html')
 
 
 ############################################################################# CADASTRO
@@ -162,7 +162,7 @@ def signin(request):
 @login_required
 def user_area(request):
 
-    if request.user.profile.tipo_usuario == 'aluno':
+    if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'orientador':
         nusp_aluno_logado = request.user.profile.nusp
     
     relatorios_aluno = Relatorio.objects.filter(nusp=nusp_aluno_logado)
@@ -243,4 +243,4 @@ def create_report(request):
 @login_required
 def sair(request):
     logout(request)
-    return redirect('home')
+    return redirect('homepage')

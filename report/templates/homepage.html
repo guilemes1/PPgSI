@@ -1,0 +1,90 @@
+{% extends "menu.html" %}
+
+{% block content %}
+
+<main>
+    <!-- Banner com imagem -->
+    <section class="banner" style="position: relative; text-align: center; color: white;">
+        <img src="https://images.pexels.com/photos/220326/pexels-photo-220326.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Biblioteca" style="width: 100%; height: 800px; opacity: 0.8;" class="img-fluid">
+        <h1 style="position: absolute; top: 95%; left: 50%; transform: translate(-50%, -50%); font-size: 2.2rem;">
+            AMBIENTE VIRTUAL DE APOIO À PÓS-GRADUAÇÃO
+        </h1>
+    </section>
+
+    <!-- Sobre PPSI -->
+    <section class="sobre-ppsi container my-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Sobre <strong>PPSI</strong></h2>
+            </div>
+            <div class="col-md-8">
+                <p>
+                    O Programa de Pós-Graduação em Sistemas de Informação (PPGSI) é uma jornada acadêmica de excelência, voltada para o desenvolvimento de habilidades avançadas e conhecimentos profundos no campo da Tecnologia da Informação. Este programa é ideal para profissionais e pesquisadores que desejam aprimorar suas competências e se destacar em um mercado de trabalho dinâmico e inovador.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrossel de logos -->
+    <section class="carrossel container my-5">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <img src="https://fcmsantacasasp.edu.br/wp-content/uploads/2020/03/fapesp.png" alt="FAPESP" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>FAPESP lança edital para novas bolsas de mestrado e doutorado a partir de novembro/24</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.uffs.edu.br/institucional/pro-reitorias/pesquisa-e-pos-graduacao/repositorio-propepg/documentos-dpe/logo-cnpq/@@images/image" alt="CNPq" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>CNPq e Unesco oferecem 50 bolsas de doutorado no Brasil para pesquisadores de países em desenvolvimento</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.foar.unesp.br/Home/Biblioteca/identificadoresdepesquisadores/lattes.png" alt="Currículo Lattes" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>Acesse a plataforma Lattes para acessar seu currículo e demais pesquisadores</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <img src="https://fcmsantacasasp.edu.br/wp-content/uploads/2020/03/fapesp.png" alt="FAPESP" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>FAPESP lança edital para novas bolsas de mestrado e doutorado a partir de novembro/24</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.uffs.edu.br/institucional/pro-reitorias/pesquisa-e-pos-graduacao/repositorio-propepg/documentos-dpe/logo-cnpq/@@images/image" alt="CNPq" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>CNPq e Unesco oferecem 50 bolsas de doutorado no Brasil para pesquisadores de países em desenvolvimento</p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="https://www.foar.unesp.br/Home/Biblioteca/identificadoresdepesquisadores/lattes.png" alt="Currículo Lattes" class="img-fluid mb-3" style="max-width: 150px;">
+                            <h5>Educação e Pesquisa</h5>
+                            <p>Acesse a plataforma Lattes para acessar seu currículo e demais pesquisadores</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>Horário de atendimento: 08h - 17h</p>
+        <p>Programa de Pós-Graduação</p>
+    </footer>
+</main>
+
+{% endblock %}
+
