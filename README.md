@@ -24,7 +24,7 @@ As principais tecnologias utilizadas são os frameworks Django (5.1.2) e Bootstr
 - Faca download e extração dos arquivos deste repositório
 - Acesse a pasta pelo terminal e execute os seguintes comandos:
 	- python -m venv venv
-	- .\venv\scripts\activate
+	- .\venv\bin\activate
 	- pip install -r requirements.txt
 	- python manage.py makemigrations
 	- python manage.py migrate

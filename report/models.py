@@ -67,6 +67,12 @@ class Disciplina(models.Model):
         return self.nome
     
 class Relatorio(models.Model):
+    STATUS_CHOICES = [
+        ('pendente', 'Pendente'),
+        ('avaliado_orientador', 'Avaliado pelo Orientador'),
+        ('avaliado_coordenador', 'Avaliado pelo Coordenador'),
+    ]
+
     AVALIACAO_ULTIMO_RELATORIO = [
         ('Aprovado', 'Aprovado'),
         ('Aprovado com ressalvas', 'Aprovado com ressalvas'),
@@ -93,6 +99,7 @@ class Relatorio(models.Model):
         ('Não', 'Não'),
     ]
 
+    # Dados do aluno
     email = models.CharField(max_length=50)
     nome_aluno = models.CharField(max_length=250)
     nome_orientador = models.CharField(max_length=250)
@@ -101,6 +108,11 @@ class Relatorio(models.Model):
     data_atualizacao_lattes = models.DateField()
     curso = models.CharField(max_length=9)
     data_matricula = models.DateField()
+
+    # Orientador relacionado
+    orientador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='relatorios_orientador')
+
+    # Avaliações
     avaliacao_ultimo_relatorio = models.CharField(max_length=38, choices=AVALIACAO_ULTIMO_RELATORIO)
     aporvacoes_inicio_curso = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
     reprovacoes_semestre_anterior = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
@@ -112,13 +124,41 @@ class Relatorio(models.Model):
     artigos_em_escrita = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
     artigos_em_avaliacao = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
     artigos_publicados = models.CharField(max_length=9, choices=OPCOES_APROVACOES_REPROVACOES_ARTIGOS)
+
+    # Atividades e outras atualizações
     atividades_academicas_semestre_atual = models.TextField()
     atividades_pesquisa = models.TextField()
     declaracao_adicional = models.TextField(blank=True, null=True)
     precisa_apoio = models.CharField(max_length=3, choices=OPCOES_APOIO)
+
+    # Pareceres e status
     data_criacao = models.DateField()
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pendente')
     parecer_orientador = models.CharField(max_length=22, blank=True, null=True)
+    conceito_orientador = models.CharField(
+        max_length=22,
+        choices=[
+            ('adequado', 'Adequado'),
+            ('adequado_com_ressalvas', 'Adequado com Ressalvas'),
+            ('insatisfatorio', 'Insatisfatório'),
+        ],
+        blank=True,
+        null=True,
+    )
+
     parecer_coordenador = models.CharField(max_length=22, blank=True, null=True)
+    conceito_coordenador = models.CharField(
+        max_length=22,
+        choices=[
+            ('adequado', 'Adequado'),
+            ('adequado_com_ressalvas', 'Adequado com Ressalvas'),
+            ('insatisfatorio', 'Insatisfatório'),
+        ],
+        blank=True,
+        null=True,
+    )
+
     primeira_avaliacao = models.BooleanField(default=True)                          #mudar apos parecer do coordenador
     segunda_avaliacao = models.BooleanField(default=False)
 

@@ -1,0 +1,27 @@
+{% extends "menu.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Avaliar Relatório</h2>
+    <p><strong>Aluno:</strong> {{ relatorio.nome_aluno }}</p>
+    <p><strong>Número USP:</strong> {{ relatorio.nusp }}</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="conceito" class="form-label">Conceito</label>
+            <select id="conceito" name="conceito" class="form-select">
+                <option value="Adequado">Adequado</option>
+                <option value="Adequado com ressalvas">Adequado com ressalvas</option>
+                <option value="Insatisfatório">Insatisfatório</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="parecer" class="form-label">Parecer</label>
+            <textarea id="parecer" name="parecer" class="form-control" rows="5"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Salvar Avaliação</button>
+        <a href="{% url 'orientador_dashboard' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

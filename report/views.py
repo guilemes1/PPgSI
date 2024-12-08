@@ -159,15 +159,32 @@ def signin(request):
                 'error': 'Usuário não encontrado!'
             })
 
+# @login_required
+# def user_area(request):
+
+#     if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'orientador':
+#         nusp_aluno_logado = request.user.profile.nusp
+    
+#     relatorios_aluno = Relatorio.objects.filter(nusp=nusp_aluno_logado)
+
+#     return render(request, 'user_area.html', {'relatorios': relatorios_aluno})
+
 @login_required
 def user_area(request):
+    if request.user.profile.tipo_usuario == 'aluno':
+        # Para alunos, filtrar relatórios pelo número USP
+        relatorios = Relatorio.objects.filter(nusp=request.user.profile.nusp)
+    elif request.user.profile.tipo_usuario == 'orientador':
+        # Para orientadores, filtrar relatórios pelos que estão vinculados a eles
+        relatorios = Relatorio.objects.filter(orientador=request.user)
+    elif request.user.profile.tipo_usuario == 'coordenador':
+        # Coordenadores podem ver todos os relatórios (ou filtrar conforme lógica específica)
+        relatorios = Relatorio.objects.all()
+    else:
+        # Nenhum relatório para outros tipos de usuários
+        relatorios = Relatorio.objects.none()
 
-    if request.user.profile.tipo_usuario == 'aluno' or request.user.profile.tipo_usuario == 'orientador':
-        nusp_aluno_logado = request.user.profile.nusp
-    
-    relatorios_aluno = Relatorio.objects.filter(nusp=nusp_aluno_logado)
-
-    return render(request, 'user_area.html', {'relatorios': relatorios_aluno})
+    return render(request, 'user_area.html', {'relatorios': relatorios})
 
 ############################################################################################################## PAG PRINCIPAL ALUNO        
 @login_required
@@ -227,8 +244,28 @@ def create_report(request):
             report.lattes = initial_data['lattes']
             report.curso = initial_data['curso']
             report.data_matricula = initial_data['data_matricula']
-            report.data_criacao = timezone.localtime(timezone.now()).date()
+            report.data_criacao = timezone.localtime(timezone.now()).date() 
+            
+            if orientador_profile:
+                report.orientador = orientador_profile.user
+
             report.save()
+            
+            # # Notifica o orientador, se encontrado
+            # if orientador_profile:
+            #     # Envia email (se configurado no Django)
+            #     send_mail(
+            #         subject='Novo relatório atribuído para parecer',
+            #         message=(
+            #             f"Olá {orientador},\n\n"
+            #             f"Um novo relatório foi submetido pelo aluno {report.nome_aluno} ({report.nusp}). "
+            #             f"Por favor, acesse o sistema para avaliá-lo."
+            #         ),
+            #         from_email='no-reply@seudominio.com',
+            #         recipient_list=[orientador_profile.user.email],
+            #     )
+
+            # Redireciona o usuário após a criação do relatório
             return redirect('user_area') 
     else:
 
@@ -244,3 +281,42 @@ def create_report(request):
 def sair(request):
     logout(request)
     return redirect('homepage')
+
+###########################################################################################################
+
+@login_required
+def orientador_dashboard(request):
+    if request.user.profile.tipo_usuario != 'orientador':
+        return redirect('homepage')  # Redireciona se não for orientador
+
+    # Busca relatórios pendentes para este orientador
+    relatorios_pendentes = Relatorio.objects.filter(
+        orientador=request.user,  # Relatórios atribuídos ao orientador logado
+        parecer_orientador__isnull=True  # Sem parecer ainda
+    )
+
+    context = {
+        'relatorios_pendentes': relatorios_pendentes
+    }
+    return render(request, 'orientador.html', context)
+
+@login_required
+def avaliar_relatorio(request, relatorio_id):
+    # Certifique-se de que o usuário é um orientador
+    if request.user.profile.tipo_usuario != 'orientador':
+        return redirect('homepage')
+
+    relatorio = get_object_or_404(Relatorio, id=relatorio_id, orientador=request.user)
+
+    if request.method == 'POST':
+        conceito = request.POST.get('conceito')
+        parecer = request.POST.get('parecer')
+
+        # Atualizando o relatório
+        relatorio.conceito_orientador = conceito
+        relatorio.parecer_orientador = parecer
+        relatorio.save()
+
+        return redirect('orientador_dashboard')
+
+    return render(request, 'avaliar_relatorio.html', {'relatorio': relatorio})

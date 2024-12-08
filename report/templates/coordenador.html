@@ -1,13 +1,39 @@
 {% extends "menu.html" %}
 
 {% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Bem-vindo, {{ user.first_name }}!</h2>
+    <p>Abaixo estão os relatórios pendentes de avaliação:</p>
 
-
-<div class='container'>
-    <br>
-    <br>
-    <br>
-    <h2> Coordenador Logado </h2>
+    {% if relatorios_pendentes %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome do Aluno</th>
+                    <th>Número USP</th>
+                    <th>Data de Criação</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for relatorio in relatorios_pendentes %}
+                    <tr>
+                        <td>{{ relatorio.nome_aluno }}</td>
+                        <td>{{ relatorio.nusp }}</td>
+                        <td>{{ relatorio.data_criacao }}</td>
+                        <td>{{ relatorio.status }}</td>
+                        <td>
+                            <a href="{% url 'avaliar_relatorio' relatorio.id %}" class="btn btn-primary btn-sm">
+                                Avaliar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-muted">Não há relatórios pendentes para avaliação no momento.</p>
+    {% endif %}
 </div>
-
 {% endblock %}

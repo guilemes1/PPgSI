@@ -22,7 +22,7 @@ from report.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
+    path('', homepage, name='homepage'),  # Adicionando a rota correta
 
     path('signup/', signup, name='signup'),
     path('complete_profile/', complete_profile, name='complete_profile'),
@@ -35,6 +35,9 @@ urlpatterns = [
     path('coordenador/', coordenador, name='coordenador'),
 
     path('create_report/', create_report, name='create_report'),
+
+    path('orientador/', orientador_dashboard, name='orientador_dashboard'),
+    path('avaliar/<int:relatorio_id>/', avaliar_relatorio, name='avaliar_relatorio'),
 
 
     
