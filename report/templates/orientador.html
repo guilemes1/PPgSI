@@ -5,7 +5,7 @@
     <h2 class="mb-4">Bem-vindo, {{ user.first_name }}!</h2>
     <p>Abaixo estão os relatórios pendentes de avaliação:</p>
 
-    {% if relatorios_pendentes %}
+    {% if relatorios %}
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for relatorio in relatorios_pendentes %}
+                {% for relatorio in relatorios %}
                     <tr>
                         <td>{{ relatorio.nome_aluno }}</td>
                         <td>{{ relatorio.nusp }}</td>
@@ -35,4 +35,3 @@
     {% endif %}
 </div>
 {% endblock %}
-

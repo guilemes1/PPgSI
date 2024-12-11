@@ -1,4 +1,5 @@
 from django import forms
+from django.shortcuts import render #adicionado dps
 from .models import Profile, Relatorio
 
 class ProfileForm(forms.ModelForm):
@@ -38,7 +39,26 @@ class RelatorioForm(forms.ModelForm):
             'precisa_apoio',
         ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field_name, field in self.fields.items():
-            field.widget.attrs.update({'class': 'form-control'})
+####################
+
+    #def __init__(self, *args, **kwargs):
+       # super().__init__(*args, **kwargs)
+        #for field_name, field in self.fields.items():
+           # field.widget.attrs.update({'class': 'form-control'})
+
+###################
+
+    def save(self, *args, **kwargs):
+        instance = super().save(commit=False)
+        if not instance.status:
+            instance.status = 'pendente'  # Marca como pendente quando o relatório é criado
+        #instance.save()
+        return instance
+
+    def relatorios_pendentes_view(request):
+        if request.user.is_coordenador:
+            # Filtra os relatórios pendentes ou aguardando avaliação
+            relatorios_pendentes = Relatorio.objects.filter(status='pendente')
+            return render(request, 'coordenador/relatorios_pendentes.html', {
+                'relatorios_pendentes': relatorios_pendentes
+            })

@@ -1,4 +1,4 @@
-
+''''''''''''''''''''''''''''''''''''''''''
 from .forms import *
 from .models import Profile
 from django.utils import timezone
@@ -223,6 +223,13 @@ def create_report(request):
         except Profile.DoesNotExist:
             orientador = "Orientador não encontrado"
 
+    # Identificar o coordenador (fixo, baseado no NUSP "coordenador1")
+    coordenador_profile = None
+    try:
+        coordenador_profile = Profile.objects.get(nusp=00000000)
+    except Profile.DoesNotExist:
+        coordenador_profile = None  # Coordenador não encontrado
+
     initial_data = {
         'email': user.email,
         'nome_aluno': f"{user.first_name} {user.last_name}",
@@ -249,8 +256,12 @@ def create_report(request):
             if orientador_profile:
                 report.orientador = orientador_profile.user
 
+            # Vincular coordenador, se encontrado
+            if coordenador_profile:
+                report.coordenador = coordenador_profile.user
+
             report.save()
-            
+
             # # Notifica o orientador, se encontrado
             # if orientador_profile:
             #     # Envia email (se configurado no Django)
@@ -301,22 +312,107 @@ def orientador_dashboard(request):
     return render(request, 'orientador.html', context)
 
 @login_required
+def coordenador_dashboard(request):
+    if request.user.profile.tipo_usuario != 'coordenador':
+        return redirect('homepage')  # Redireciona se não for coordenador
+
+    # Busca relatórios pendentes para este coordenador
+    relatorios_pendentes = Relatorio.objects.filter(
+        coordenador=request.user,  # Relatórios atribuídos ao coordenador logado
+        parecer_coordenador__isnull=True  # Sem parecer ainda
+    )
+
+    context = {
+        'relatorios_pendentes': relatorios_pendentes
+    }
+    return render(request, 'coordenador.html', context)
+
+# @login_required
+# def avaliar_orientador(request, relatorio_id):
+#     relatorio = get_object_or_404(Relatorio, id=relatorio_id)
+
+#     if request.user != relatorio.orientador:
+#         # Caso o usuário não seja o orientador, redireciona ou exibe uma mensagem de erro
+#         return redirect('acesso_negado')
+
+#     if request.method == 'POST':
+#         relatorio.status = 'avaliado_orientador'
+#         relatorio.save()  # Salva o novo status
+#         return redirect('detalhes_relatorio', relatorio_id=relatorio.id)
+    
+#     return render(request, 'avaliar_relatorio.html', {'relatorio': relatorio})
+
+# def avaliar_coordenador(request, relatorio_id):
+#     relatorio = get_object_or_404(Relatorio, id=relatorio_id)
+
+#     if request.user != relatorio.coordenador:
+#         # Caso o usuário não seja o coordenador, redireciona ou exibe uma mensagem de erro
+#         return redirect('acesso_negado')
+
+#     if request.method == 'POST':
+#         relatorio.status = 'avaliado_coordenador'
+#         relatorio.save()  # Salva o novo status
+#         return redirect('detalhes_relatorio', relatorio_id=relatorio.id)
+    
+#     return render(request, 'avaliar_relatorio_coordenador.html', {'relatorio': relatorio})
+
+
+@login_required
 def avaliar_relatorio(request, relatorio_id):
     # Certifique-se de que o usuário é um orientador
     if request.user.profile.tipo_usuario != 'orientador':
         return redirect('homepage')
 
-    relatorio = get_object_or_404(Relatorio, id=relatorio_id, orientador=request.user)
+    if request.user.profile.tipo_usuario == 'orientador':
+        relatorio = get_object_or_404(Relatorio, id=relatorio_id, orientador=request.user)
 
-    if request.method == 'POST':
-        conceito = request.POST.get('conceito')
-        parecer = request.POST.get('parecer')
+        if request.method == 'POST':
+            conceito = request.POST.get('conceito')
+            parecer = request.POST.get('parecer')
 
-        # Atualizando o relatório
-        relatorio.conceito_orientador = conceito
-        relatorio.parecer_orientador = parecer
-        relatorio.save()
+            # Atualizando o relatório
+            relatorio.conceito_orientador = conceito
+            relatorio.parecer_orientador = parecer
 
-        return redirect('orientador_dashboard')
+            # Atualizando o status para "em_avaliacao" durante a avaliação
+            relatorio.status = 'em_avaliacao'
 
-    return render(request, 'avaliar_relatorio.html', {'relatorio': relatorio})
+            # Se o parecer foi dado e o conceito foi preenchido, o relatório pode ser finalizado
+            if conceito and parecer:
+                relatorio.status = 'finalizado'
+
+            relatorio.save()
+
+            return redirect('orientador_dashboard')
+        
+        return render(request, 'avaliar_relatorio.html', {'relatorio': relatorio})
+
+@login_required
+def avaliar_relatorio_coordenador(request, relatorio_id):
+    # Certifique-se de que o usuário é um orientador
+    if request.user.profile.tipo_usuario != 'coordenador':
+        return redirect('homepage')
+
+    if request.user.profile.tipo_usuario == 'coordenador':
+        relatorio = get_object_or_404(Relatorio, id=relatorio_id, coordenador=request.user)
+
+        if request.method == 'POST':
+            conceito = request.POST.get('conceito')
+            parecer = request.POST.get('parecer')
+
+            # Atualizando o relatório
+            relatorio.conceito_coordenador = conceito
+            relatorio.parecer_coordenador = parecer
+
+            # Atualizando o status para "em_avaliacao" durante a avaliação
+            relatorio.status = 'em_avaliacao'
+
+            # Se o parecer foi dado e o conceito foi preenchido, o relatório pode ser finalizado
+            if conceito and parecer:
+                relatorio.status = 'finalizado'
+
+            relatorio.save()
+
+            return redirect('coordenador_dashboard')
+
+        return render(request, 'avaliar_relatorio_coordenador.html', {'relatorio': relatorio})

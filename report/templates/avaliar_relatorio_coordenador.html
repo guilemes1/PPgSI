@@ -17,21 +17,21 @@
         <div class="mb-3">
             <label for="conceito" class="form-label">Conceito</label>
             <select id="conceito" name="conceito" class="form-select">
-                <option value="Adequado" {% if relatorio.conceito_orientador == "Adequado" %}selected{% endif %}>Adequado</option>
-                <option value="Adequado com ressalvas" {% if relatorio.conceito_orientador == "Adequado com ressalvas" %}selected{% endif %}>Adequado com ressalvas</option>
-                <option value="Insatisfatório" {% if relatorio.conceito_orientador == "Insatisfatório" %}selected{% endif %}>Insatisfatório</option>
+                <option value="Adequado" {% if relatorio.conceito_coordenador == "Adequado" %}selected{% endif %}>Adequado</option>
+                <option value="Adequado com ressalvas" {% if relatorio.conceito_coordenador == "Adequado com ressalvas" %}selected{% endif %}>Adequado com ressalvas</option>
+                <option value="Insatisfatório" {% if relatorio.conceito_coordenador == "Insatisfatório" %}selected{% endif %}>Insatisfatório</option>
             </select>
         </div>
 
         <!-- Campo para Parecer -->
         <div class="mb-3">
             <label for="parecer" class="form-label">Parecer</label>
-            <textarea id="parecer" name="parecer" class="form-control" rows="5">{{ relatorio.parecer_orientador }}</textarea>
+            <textarea id="parecer" name="parecer" class="form-control" rows="5">{{ relatorio.parecer_coordenador }}</textarea>
         </div>
 
         <!-- Botões de ação -->
         <button type="submit" class="btn btn-success">Salvar Avaliação</button>
-        <a href="{% url 'orientador_dashboard' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'coordenador_dashboard' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}

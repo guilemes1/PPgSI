@@ -71,7 +71,15 @@ class Relatorio(models.Model):
         ('pendente', 'Pendente'),
         ('avaliado_orientador', 'Avaliado pelo Orientador'),
         ('avaliado_coordenador', 'Avaliado pelo Coordenador'),
+        ('finalizado', 'Finalizado'),
     ]
+
+    # nome = models.CharField(max_length=200)
+    # descricao = models.TextField()
+    # status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pendente')
+    # data_criacao = models.DateTimeField(auto_now_add=True)
+    # orientador = models.ForeignKey(User, related_name='orientador', on_delete=models.SET_NULL, null=True) #add dps
+    # coordenador = models.ForeignKey(User, related_name='coordenador', on_delete=models.SET_NULL, null=True) #add dps
 
     AVALIACAO_ULTIMO_RELATORIO = [
         ('Aprovado', 'Aprovado'),
@@ -111,6 +119,10 @@ class Relatorio(models.Model):
 
     # Orientador relacionado
     orientador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='relatorios_orientador')
+    coordenador = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='relatorios_coordenador')
+
+    def __str__(self):
+        return f"Relatório de {self.nome_aluno} - {self.nusp}"
 
     # Avaliações
     avaliacao_ultimo_relatorio = models.CharField(max_length=38, choices=AVALIACAO_ULTIMO_RELATORIO)

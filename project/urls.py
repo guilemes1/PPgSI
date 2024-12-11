@@ -37,7 +37,10 @@ urlpatterns = [
     path('create_report/', create_report, name='create_report'),
 
     path('orientador/', orientador_dashboard, name='orientador_dashboard'),
-    path('avaliar/<int:relatorio_id>/', avaliar_relatorio, name='avaliar_relatorio'),
+    path('avaliar_orientador/<int:relatorio_id>/', avaliar_relatorio, name='avaliar_relatorio'),
+
+    path('coordenador/', coordenador_dashboard, name='coordenador_dashboard'),
+    path('avaliar_coordenador/<int:relatorio_id>/', avaliar_relatorio_coordenador, name='avaliar_relatorio_coordenador'),
 
 
     
